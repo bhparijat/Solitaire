@@ -643,9 +643,9 @@ class env:
             if len(self.state.foundation[i]) == 0:
                 continue
                 
-            mn = min(mn,self.state.foundation[i].number)
+            mn = min(mn,self.state.foundation[i][-1].number)
                 
-            mx = max(mx,self.state.foundation[i].number)
+            mx = max(mx,self.state.foundation[i][-1].number)
             
             
         
