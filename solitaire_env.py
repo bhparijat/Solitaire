@@ -106,10 +106,14 @@ class state:
                 check2.append(card_index)
         
         
+        for i in range(7):
+            for cd in self.tableau[i]:
+                cd.face = 'up'
         
         for i in range(7):
             self.tableau[i][-1].face = 'up'
-            
+          
+        
         check1.sort()
         check2.sort()
         
@@ -342,7 +346,6 @@ class env:
         
         if len(moves) == 0:
             return False
-        
         
         
         
@@ -633,6 +636,28 @@ class env:
     def foundation_to_tableau(self):
         
         moves = []
+        
+        mn = 15
+        mx = -1
+        for i in range(4):
+            if len(self.state.foundation[i]) == 0:
+                continue
+                
+            mn = min(mn,self.state.foundation[i].number)
+                
+            mx = max(mx,self.state.foundation[i].number)
+            
+            
+        
+        
+        if mx == 2:
+            return False
+        
+        
+        if abs(mx-mn) <=2:
+            return False
+        
+        
         for i in range(4):
             
             if len(self.state.foundation[i]) == 0:
