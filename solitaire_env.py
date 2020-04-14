@@ -635,7 +635,7 @@ class env:
         
     def foundation_to_tableau(self):
         
-        moves = []
+#         moves = []
         
         mn = 15
         mx = -1
@@ -657,7 +657,7 @@ class env:
         if abs(mx-mn) <=2:
             return False
         
-        
+        moves = []
         for i in range(4):
             
             if len(self.state.foundation[i]) == 0:
