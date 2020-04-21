@@ -219,7 +219,7 @@ class env:
         
         return tuple(hashable_state)
         
-    def step(self,action):
+    def step(self,action,fp_flag):
         
         taken = None
         if action == 0 :
@@ -235,7 +235,7 @@ class env:
             taken = self.pile_to_tableau()
             
         elif action == 4:
-            taken = self.foundation_to_tableau()
+            taken = self.foundation_to_tableau(fp_flag)
             
         elif action == 5:
             taken = self.tableau_to_tableau_not_reveal()
@@ -633,29 +633,30 @@ class env:
             
         return True
         
-    def foundation_to_tableau(self):
+    def foundation_to_tableau(self,fp_flag):
         
 #         moves = []
         
-        mn = 15
-        mx = -1
-        for i in range(4):
-            if len(self.state.foundation[i]) == 0:
-                continue
-                
-            mn = min(mn,self.state.foundation[i][-1].number)
-                
-            mx = max(mx,self.state.foundation[i][-1].number)
-            
-            
-        
-        
-        if mx == 2:
-            return False
-        
-        
-        if abs(mx-mn) <=2:
-            return False
+        if fp_flag == True:
+            mn = 15
+            mx = -1
+            for i in range(4):
+                if len(self.state.foundation[i]) == 0:
+                    continue
+
+                mn = min(mn,self.state.foundation[i][-1].number)
+
+                mx = max(mx,self.state.foundation[i][-1].number)
+
+
+
+
+            if mx == 2:
+                return False
+
+
+            if abs(mx-mn) <=2:
+                return False
         
         moves = []
         for i in range(4):
