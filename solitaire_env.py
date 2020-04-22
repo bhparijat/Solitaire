@@ -638,14 +638,22 @@ class env:
 #         moves = []
         
         if fp_flag == True:
-            mn = 15
-            mx = -1
+            mn = 13
+            mx = 0
             for i in range(4):
                 if len(self.state.foundation[i]) == 0:
-                    continue
+                    mn = 0
+                    break
 
                 mn = min(mn,self.state.foundation[i][-1].number)
-
+                
+               
+            
+            for i in range(4):
+                
+                if len(self.state.foundation[i]) == 0:
+                    continue
+                    
                 mx = max(mx,self.state.foundation[i][-1].number)
 
 
