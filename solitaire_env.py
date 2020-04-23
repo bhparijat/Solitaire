@@ -638,6 +638,8 @@ class env:
 #         moves = []
         
         if fp_flag == True:
+            
+            print("flag is being checked")
             mn = 13
             mx = 0
             for i in range(4):
