@@ -108,7 +108,7 @@ class state:
         
         for i in range(7):
             for cd in self.tableau[i]:
-                cd.face = 'up'
+                cd.face = 'down'
         
         for i in range(7):
             self.tableau[i][-1].face = 'up'
