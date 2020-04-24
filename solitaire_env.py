@@ -438,7 +438,7 @@ class env:
 
             deep_copy_state.foundation[self.suit_number(card.suit)].append(card)
             
-            hashable_state = self.generate_hashable_state(deep_copy_state)
+            hashable_state = self.generate_hashable_state_modified(deep_copy_state)
             
             if hashable_state not in self.hashable_map:
                 
@@ -532,7 +532,7 @@ class env:
                 deep_copy_state.foundation[f_no].append(card)
 
             
-            hashable_state = self.generate_hashable_state(deep_copy_state)
+            hashable_state = self.generate_hashable_state_modified(deep_copy_state)
             
             if hashable_state not in self.hashable_map:
                 
@@ -627,7 +627,7 @@ class env:
             deep_copy_state.tableau[from_tableau][-1].face = 'up'
             
             
-            hashable_state = self.generate_hashable_state(deep_copy_state)
+            hashable_state = self.generate_hashable_state_modified(deep_copy_state)
             
             if hashable_state not in self.hashable_map:
                 
@@ -686,7 +686,7 @@ class env:
 
             deep_copy_state.pile.pop(to_move)
         
-            hashable_state = self.generate_hashable_state(deep_copy_state)
+            hashable_state = self.generate_hashable_state_modified(deep_copy_state)
             
             if hashable_state not in self.hashable_map:
                 
@@ -789,7 +789,7 @@ class env:
 
 
 
-            hashable_state = self.generate_hashable_state(deep_copy_state)
+            hashable_state = self.generate_hashable_state_modified(deep_copy_state)
 
             if hashable_state not in self.hashable_map:
 
@@ -894,7 +894,7 @@ class env:
             deep_copy_state.tableau[from_tableau] = deep_copy_state.tableau[from_tableau[:cards_to_move]]
 
 
-            hashable_state = self.generate_hashable_state(deep_copy_state)
+            hashable_state = self.generate_hashable_state_modified(deep_copy_state)
 
             if hashable_state not in self.hashable_map:
 
