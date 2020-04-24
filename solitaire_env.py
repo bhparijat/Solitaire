@@ -213,23 +213,27 @@ class env:
     def current_state(self):
         return self.state
     
-    def get_card_state(self,cd):
+    def get_card_tuple(self,cd):
         
         card_tuple = (cd.get_suit_number(),cd.number,cd.get_color_number(),cd.get_face_number())
         
         return card_tuple
     
-    def get_hashable_state_modified(self,state):
+    def generate_hashable_state_modified(self,state):
         
         hashable_state = []
+        
+        hashable_state_pile = []
         
         for cd in state.pile:
             card_tuple = self.get_card_tuple(cd)
             hashable_state_pile.append(card_tuple)
-            
+        
+        tableau_hashed = []
+        
         for i in range(7):
             
-            tableau_hashed = []
+            hashable_state_tableau = []
             
             for cd in state.tableau[i]:
 
@@ -239,11 +243,13 @@ class env:
             
             tableau_hashed.append(tuple(hashable_state_tableau))
             
-                
+          
+        foundation_hashed = []
+        
         for i in range(4):
             
-            foundation_hashed = []
             
+            hashable_state_foundation = []
             for cd in state.foundation[i]:
                 
                 
