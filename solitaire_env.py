@@ -24,7 +24,26 @@ class card:
         self.number = number
         self.speciality = speciality
         self.face = face
+       
+    def get_suit_number(self):
         
+        suit_map = {"club":0,"heart":1,"diamond":2,"spade":3}
+        
+        return suit_map[self.suit]
+    
+    def get_color_number(self):
+        
+        color_map = {"red":0,"black":1}
+        
+        return color_map[self.color]
+    
+    def get_face_number(self):
+        
+        face_map = {"up":0,"down":1}
+        
+        return face_map[self.face]
+    
+    
         
 class state:
     """
@@ -194,6 +213,52 @@ class env:
     def current_state(self):
         return self.state
     
+    def get_card_state(self,cd):
+        
+        card_tuple = (cd.get_suit_number(),cd.number,cd.get_color_number(),cd.get_face_number())
+        
+        return card_tuple
+    
+    def get_hashable_state_modified(self,state):
+        
+        hashable_state = []
+        
+        for cd in state.pile:
+            card_tuple = self.get_card_tuple(cd)
+            hashable_state_pile.append(card_tuple)
+            
+        for i in range(7):
+            
+            tableau_hashed = []
+            
+            for cd in state.tableau[i]:
+
+                card_tuple = self.get_card_tuple(cd)
+                hashable_state_tableau.append(card_tuple)
+                
+            
+            tableau_hashed.append(tuple(hashable_state_tableau))
+            
+                
+        for i in range(4):
+            
+            foundation_hashed = []
+            
+            for cd in state.foundation[i]:
+                
+                
+                card_tuple = self.get_card_tuple(cd)
+                hashable_state_foundation.append(card_tuple)
+                
+            foundation_hashed.append(tuple(hashable_state_foundation))
+            
+            
+            
+        hashable_state = [tuple(hashable_state_pile), tuple(foundation_hashed), tuple(tableau_hashed) ]
+        
+        
+        return tuple(hashable_state)
+        
     def generate_hashable_state(self,state):
         
         hashable_state = []
@@ -639,7 +704,7 @@ class env:
         
         if fp_flag == True:
             
-            print("flag is being checked")
+            #print("flag is being checked")
             mn = 13
             mx = 0
             for i in range(4):
