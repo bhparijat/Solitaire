@@ -21,7 +21,7 @@ def greedy_policy(en,tot,action_freq,actions_matrix,game,fp_flag=False):
                 actions_m.append(action)
                 
                 
-                actions_matrix[game] = [game,actions_m,en.state,start_state,True] 
+                actions_matrix[game] = [game,actions_m,en.state,start_state,True,"won game"] 
                 
                 return step,True
             
@@ -34,12 +34,12 @@ def greedy_policy(en,tot,action_freq,actions_matrix,game,fp_flag=False):
 
         if taken == False:
             
-            actions_matrix[game] = [game,actions_m,en.state,start_state,False] 
+            actions_matrix[game] = [game,actions_m,en.state,start_state,False, "no action taken"] 
             
             return step,False
         
        
-    actions_matrix[game] = [game,actions_m,en.state,start_state,False] 
+    actions_matrix[game] = [game,actions_m,en.state,start_state,False, "steps exhausted"] 
     
     
     
