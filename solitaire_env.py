@@ -177,6 +177,46 @@ class env:
     def reset(self):
         self.state = state()
     
+    def copy_state(self):
+        
+        new_state = state()
+        
+        new_state.pile = []
+        
+        new_state.tableau = []
+        
+        new_state.foundation = []
+        
+        
+        for cd in self.state.pile:
+            new_state.pile.append(card(cd.color,cd.suit,cd.number,cd.speciality,cd.face))
+            
+            
+            
+        for i in range(7):   
+            
+            new_state.tableau.append([])
+            
+            for cd in self.state.tableau[i]:
+                
+                
+                new_state.tableau[i].append(card(cd.color,cd.suit,cd.number,cd.speciality,cd.face))
+                
+                
+                
+        for i in range(4):
+            
+            new_state.foundation.append([])
+            
+            for cd in self.state.foundation[i]:
+                
+            
+                new_state.foundation[i].append(card(cd.color,cd.suit,cd.number,cd.speciality,cd.face))
+                
+                
+                
+                
+        return new_state
     def generate_deep_copy_state(self,to_copy_state):
         
         deep_copy_state = state()
@@ -209,6 +249,8 @@ class env:
                 
         
         return deep_copy_state
+    
+    
         
     def current_state(self):
         return self.state
