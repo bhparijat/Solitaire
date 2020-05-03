@@ -497,7 +497,7 @@ class env:
                 return True
         
         return False
-    def to_foundation_stack(self):
+    def to_foundation_stack(self,debug):
         
         
         moves = []
@@ -511,7 +511,9 @@ class env:
                 moves.append((0,i))
                 
             
-            
+        if debug == True:    
+            print("moves from pile\n",moves);
+        
         
         for i in range(7):
             
@@ -530,6 +532,9 @@ class env:
         if len(moves) == 0:
             return False
         
+        
+        if debug == True:
+            print(moves)
         
         
         mp = {}
