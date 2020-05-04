@@ -307,39 +307,39 @@ class env:
         
         return tuple(hashable_state)
         
-    def generate_hashable_state(self,state):
+#     def generate_hashable_state(self,state):
         
-        hashable_state = []
+#         hashable_state = []
         
-        #for card in self.state.pile:
+#         #for card in self.state.pile:
             
-        hashable_state.append(tuple(state.pile))
+#         hashable_state.append(tuple(state.pile))
             
         
-        for i in range(7):
+#         for i in range(7):
             
             
-            hashable_state.append(tuple(state.tableau[i]))
+#             hashable_state.append(tuple(state.tableau[i]))
                 
                 
         
-        for i in range(4):
+#         for i in range(4):
             
-            hashable_state.append(tuple(state.foundation[i]))
+#             hashable_state.append(tuple(state.foundation[i]))
             
             
          
         
-        return tuple(hashable_state)
+#         return tuple(hashable_state)
         
-    def step(self,action,fp_flag):
+    def step(self,action,fp_flag,debug):
         
         taken = None
         if action == 0 :
             taken = self.tableau_to_foundation_reveal()
             
         elif action == 1:
-            taken = self.to_foundation_stack()
+            taken = self.to_foundation_stack(debug)
             
         elif action == 2:
             taken = self.tableau_to_tableau_reveal()
