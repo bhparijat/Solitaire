@@ -354,7 +354,7 @@ class env:
             taken = self.tableau_to_tableau_not_reveal()
     
         
-        key = self.generate_hashable_state(self.state)
+        key = self.generate_hashable_state_modified(self.state)
         
         #print(tuple(self.hashable_state))
         
@@ -652,17 +652,19 @@ class env:
            
         if len(zero_len_stack) > 0:
             for j in range(7):
-
-                cd = self.tableau[j][movable[j][0]]
                 
-                if len(movable[j]) > 0 and cd.number == 13:
+                if len(movable[j]) > 0:
                     
-                    for t in zero_len_stack:
-                        
-                        moves.append((j,movable[j][0],t))
+                    cd = self.state.tableau[j][movable[j][0]]
+
+                    if  cd.number == 13:
+
+                        for t in zero_len_stack:
+
+                            moves.append((j,movable[j][0],t))
             
             
-            
+                
         
         if len(moves)==0:
             return False
