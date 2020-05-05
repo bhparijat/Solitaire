@@ -601,9 +601,14 @@ class env:
         
         movable = []
         
+        zero_len_stack = []
         for i in range(7):
             
             movable.append([])
+            
+            if len(self.state.tableau[i]) == 0:
+                zero_len_stack.append(i)
+                
             if len(self.state.tableau[i])<=1:
                 continue
             
@@ -642,7 +647,22 @@ class env:
                     
                     moves.append((i,movable[i][0],j))
                     
+            
+            
+           
+        if len(zero_len_stack) > 0:
+            for j in range(7):
+
+                cd = self.tableau[j][movable[j][0]]
+                
+                if len(movable[j]) > 0 and cd.number == 13:
                     
+                    for t in zero_len_stack:
+                        
+                        moves.append((j,movable[j][0],t))
+            
+            
+            
         
         if len(moves)==0:
             return False
