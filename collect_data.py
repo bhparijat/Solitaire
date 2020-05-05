@@ -14,7 +14,7 @@ sys.setrecursionlimit(10**6)
 number_of_runs = 100
 class Collect_data:
     
-    def __init__(self,N,games_per_run=1000,fp_flag = True,debug=False,save_intermediate_states=False):
+    def __init__(self,N=100,games_per_run=1000,fp_flag = True,debug=False,save_intermediate_states=False):
         
         self.number_of_runs = N
         
@@ -101,7 +101,7 @@ class Collect_data:
     
     
 if __name__ == "__main__":
-    collect_data = Collect_data(10)
+    collect_data = Collect_data(N=100,games_per_run=10000)
     collect_data.run_all_episodes()
     print(collect_data.average_wins_for_runs())
     

@@ -3,7 +3,7 @@
 #SBATCH -p dgx2
 #SBATCH -J data_cleaning
 #SBATCH --nodes=2
-#SBATCH --mem=40G
+#SBATCH --mem=80G
 #SBATCH -o solitaire.out
 #SBATCH -e solitaire.err
 #SBATCH --time=7-00:00:00
