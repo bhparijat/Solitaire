@@ -14,7 +14,7 @@ sys.setrecursionlimit(10**6)
 number_of_runs = 100
 class Collect_data:
     
-    def __init__(self,N,games_per_run=1000,fp_flag = True,debug=False,save_intermediate_states=False):
+    def __init__(self,N=100,games_per_run=1000,fp_flag = True,debug=False,save_intermediate_states=False):
         
         self.number_of_runs = N
         
@@ -44,7 +44,7 @@ class Collect_data:
         
         
         
-        for this_game in tq.tqdm(range(self.games_per_run)):
+        for this_game in range(self.games_per_run):
             
             env = solitaire_env.env()
             action_freq = {0:0,1:0,2:0,3:0,4:0,5:0}
@@ -65,7 +65,7 @@ class Collect_data:
         
         
         
-        for run in tq.tqdm(range(self.number_of_runs)):
+        for run in range(self.number_of_runs):
             
             this_run_data = {}
             wins, actions_and_states = self.run_one_episode()
@@ -79,7 +79,7 @@ class Collect_data:
             
             
             
-            
+            print("run {} completed".format(run+1))
         
         
     def average_wins_for_runs(self):
@@ -101,7 +101,7 @@ class Collect_data:
     
     
 if __name__ == "__main__":
-    collect_data = Collect_data(10)
+    collect_data = Collect_data(N=100,games_per_run=10000)
     collect_data.run_all_episodes()
     print(collect_data.average_wins_for_runs())
     
