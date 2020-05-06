@@ -407,28 +407,33 @@ class env:
         for i,card in enumerate(self.state.pile):
             
             movable_where.append([])
-            
+
             movable_where[i] = {'tableau':[],'foundation':[]}
             
-            for f in range(7):
-                
-                cond1 = len(self.state.tableau[f]) == 0 and  card.number == 13
-                
-                cond2 = len(self.state.tableau[f]) > 0 and self.state.tableau[f][-1].color != card.color and card.number+1 == self.state.tableau[f][-1].number
-                
-                if cond1 or cond2:
-                    movable_where[i]['tableau'].append(f)
-                    
             
-            if self.check_compatible(card):
-                movable_where[i]['foundation'].append(self.suit_number(card.suit))
-             
-            
-            if len(movable_where[i]['tableau']) !=0 :
-                movable_indices_tableau.append(i)
+            if (i%3) == 0 or len(self.state.pile)<3:
                 
-            if len(movable_where[i]['foundation']) != 0:
-                movable_indices_foundation.append(i)
+                
+
+                for f in range(7):
+
+                    cond1 = len(self.state.tableau[f]) == 0 and  card.number == 13
+
+                    cond2 = len(self.state.tableau[f]) > 0 and self.state.tableau[f][-1].color != card.color and card.number+1 == self.state.tableau[f][-1].number
+
+                    if cond1 or cond2:
+                        movable_where[i]['tableau'].append(f)
+
+
+                if self.check_compatible(card):
+                    movable_where[i]['foundation'].append(self.suit_number(card.suit))
+
+
+                if len(movable_where[i]['tableau']) !=0 :
+                    movable_indices_tableau.append(i)
+
+                if len(movable_where[i]['foundation']) != 0:
+                    movable_indices_foundation.append(i)
                 
         return movable_where,movable_indices_tableau,movable_indices_foundation
             
@@ -502,31 +507,36 @@ class env:
         
         moves = []
         
-        
+       
         for i,card in enumerate(self.state.pile):
             
-            f_no = self.suit_number(card.suit)
             
-            if card.number == 1 or (len(self.state.foundation[f_no]) > 0 and card.number == self.state.foundation[f_no][-1].number + 1):
-                moves.append((0,i))
+            if (i%3)==0 or len(self.state.pile)<3:
                 
-            
-        if debug == True:    
-            print("moves from pile\n",moves);
-        
-        
-        for i in range(7):
-            
-            if len(self.state.tableau[i]) == 0:
-                continue
                 
-            card = self.state.tableau[i][-1]
-            
-            f_no = self.suit_number(card.suit)
-            
-            if card.number == 1 or (len(self.state.foundation[f_no]) > 0 and card.number == self.state.foundation[f_no][-1].number + 1):
-                moves.append((1,i))
                 
+                f_no = self.suit_number(card.suit)
+
+                if card.number == 1 or (len(self.state.foundation[f_no]) > 0 and card.number == self.state.foundation[f_no][-1].number + 1):
+                    moves.append((0,i))
+
+
+            if debug == True:    
+                print("moves from pile\n",moves);
+
+
+            for i in range(7):
+
+                if len(self.state.tableau[i]) == 0:
+                    continue
+
+                card = self.state.tableau[i][-1]
+
+                f_no = self.suit_number(card.suit)
+
+                if card.number == 1 or (len(self.state.foundation[f_no]) > 0 and card.number == self.state.foundation[f_no][-1].number + 1):
+                    moves.append((1,i))
+
                 
           
         if len(moves) == 0:
