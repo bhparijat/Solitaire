@@ -345,7 +345,7 @@ class env:
             taken = self.tableau_to_tableau_reveal()
             
         elif action == 3:
-            taken = self.pile_to_tableau()
+            taken = self.pile_to_tableau(debug)
             
         elif action == 4:
             taken = self.foundation_to_tableau(fp_flag)
@@ -369,13 +369,13 @@ class env:
     
     
     
-    def print_card(self,card):
-        print("suit = {:10s} color = {:10s} number = {:5} speciality = {:10s} face = {:5s}".format(card.suit,card.color,card.number,str(card.speciality),card.face))
+    def print_card(self,card,i):
+        print("position {:4} suit = {:10s} color = {:10s} number = {:5} speciality = {:10s} face = {:5s}".format(i,card.suit,card.color,card.number,str(card.speciality),card.face))
 
     def print_cards(self,cards):
         
-        for card in cards:
-            self.print_card(card)
+        for i,card in enumerate(cards):
+            self.print_card(card,i)
     
     def check_compatible(self,card):
         
@@ -521,9 +521,11 @@ class env:
                     moves.append((0,i))
 
 
-            if debug == True:    
-                print("moves from pile\n",moves);
+#             if debug == True:    
+#                 print("moves from pile\n",moves);
 
+               
+            tableau_moves=[]
 
             for i in range(7):
 
@@ -536,7 +538,7 @@ class env:
 
                 if card.number == 1 or (len(self.state.foundation[f_no]) > 0 and card.number == self.state.foundation[f_no][-1].number + 1):
                     moves.append((1,i))
-
+                    tableau_moves.append((i,card.number,card.suit,card.color))
                 
           
         if len(moves) == 0:
@@ -544,7 +546,10 @@ class env:
         
         
         if debug == True:
-            print(moves)
+            
+            for x in tableau_moves:
+                
+                print("Tableau number {}, suit {}, card number {}, card color {}".format(x[0],x[2],x[1],x[3]))
         
         
         mp = {}
@@ -725,7 +730,7 @@ class env:
             #return True
         
         return False
-    def pile_to_tableau(self):
+    def pile_to_tableau(self,debug):
         
         movable_where,movable_indices_tableau,movable_indices_foundation  = self.highlight_movable_cards_pile()
         
