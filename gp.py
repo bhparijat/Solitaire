@@ -1,4 +1,4 @@
-def greedy_policy(en,tot,action_freq,actions_matrix,game,fp_flag=False,debug=False,save_all_states = False):
+def greedy_policy(en,tot,action_freq,actions_matrix,game,fp_flag=False,debug=False,save_all_states = False,save_collected_data= {}):
     
     actions_m = []
     
@@ -22,6 +22,10 @@ def greedy_policy(en,tot,action_freq,actions_matrix,game,fp_flag=False,debug=Fal
                 
                 actions_matrix[game] = [game,actions_m,en.state,start_state,"won"] 
                 
+                hashable_state = en.generate_hashable_state_modified(en.state)
+                save_collected_data[hashable_state] = action
+                
+                
                 if save_all_states == True:
                     actions_matrix[game].append(game_states)
                     
@@ -33,6 +37,8 @@ def greedy_policy(en,tot,action_freq,actions_matrix,game,fp_flag=False,debug=Fal
                 actions_m.append(action)
                 game_states.append(en.state)
                 
+                hashable_state = en.generate_hashable_state_modified(en.state)
+                save_collected_data[hashable_state] = action
                 break
 
         if taken == False:

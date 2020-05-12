@@ -18,6 +18,7 @@ class Collect_data:
         
         self.number_of_runs = N
         
+        self.save_collected_data = {}
         self.games_per_run = games_per_run
         
         self.fp_flag = fp_flag
@@ -31,6 +32,8 @@ class Collect_data:
         self.max_steps_per_game = 100000
     
         self.win_count = []
+        
+        
     def run_one_episode(self):
          
         wins = 0
@@ -49,7 +52,7 @@ class Collect_data:
             env = solitaire_env.env()
             action_freq = {0:0,1:0,2:0,3:0,4:0,5:0}
             
-            step,won = gp.greedy_policy(env,self.max_steps_per_game,action_freq,actions_matrix,this_game,self.fp_flag)
+            step,won = gp.greedy_policy(env,self.max_steps_per_game,action_freq,actions_matrix,this_game,self.fp_flag,self.save_collected_data)
             
             if won == True:
                 wins+=1
@@ -81,7 +84,8 @@ class Collect_data:
             
             print("run {} completed".format(run+1))
         
-        
+        with open("games/hardgames_data.pkl","wb") as file:
+            pkl.dump(self.save_collected_data,file)
     def average_wins_for_runs(self):
         
         win_percentage = [x*100 / self.games_per_run for x in self.win_count]
@@ -101,7 +105,7 @@ class Collect_data:
     
     
 if __name__ == "__main__":
-    collect_data = Collect_data(N=100,games_per_run=10000)
+    collect_data = Collect_data(N=10,games_per_run=10000)
     collect_data.run_all_episodes()
     print(collect_data.average_wins_for_runs())
     

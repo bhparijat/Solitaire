@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A eecs
 #SBATCH -p dgx2
-#SBATCH -J data_cleaning
+#SBATCH -J solitaire
 #SBATCH --nodes=2
 #SBATCH --mem=80G
 #SBATCH -o solitaire.out

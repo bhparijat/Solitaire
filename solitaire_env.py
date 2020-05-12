@@ -307,34 +307,15 @@ class env:
         
         return tuple(hashable_state)
         
-#     def generate_hashable_state(self,state):
-        
-#         hashable_state = []
-        
-#         #for card in self.state.pile:
-            
-#         hashable_state.append(tuple(state.pile))
-            
-        
-#         for i in range(7):
-            
-            
-#             hashable_state.append(tuple(state.tableau[i]))
-                
-                
-        
-#         for i in range(4):
-            
-#             hashable_state.append(tuple(state.foundation[i]))
-            
-            
-         
-        
-#         return tuple(hashable_state)
         
     def step(self,action,fp_flag,debug):
         
         taken = None
+        
+        
+        if debug == True:
+            print("Debug is True")
+            
         if action == 0 :
             taken = self.tableau_to_foundation_reveal()
             
@@ -507,7 +488,8 @@ class env:
         
         moves = []
         
-       
+        
+        #print(" To foundation has been called with debug equal to ",debug)
         for i,card in enumerate(self.state.pile):
             
             
@@ -521,24 +503,24 @@ class env:
                     moves.append((0,i))
 
 
-#             if debug == True:    
-#                 print("moves from pile\n",moves);
+        if debug == True:    
+            print("moves from pile\n",moves);
 
                
-            tableau_moves=[]
+        tableau_moves=[]
 
-            for i in range(7):
+        for i in range(7):
 
-                if len(self.state.tableau[i]) == 0:
-                    continue
+            if len(self.state.tableau[i]) == 0:
+                continue
 
-                card = self.state.tableau[i][-1]
+            card = self.state.tableau[i][-1]
 
-                f_no = self.suit_number(card.suit)
+            f_no = self.suit_number(card.suit)
 
-                if card.number == 1 or (len(self.state.foundation[f_no]) > 0 and card.number == self.state.foundation[f_no][-1].number + 1):
-                    moves.append((1,i))
-                    tableau_moves.append((i,card.number,card.suit,card.color))
+            if card.number == 1 or (len(self.state.foundation[f_no]) > 0 and card.number == self.state.foundation[f_no][-1].number + 1):
+                moves.append((1,i))
+                tableau_moves.append((i,card.number,card.suit,card.color))
                 
           
         if len(moves) == 0:
@@ -816,12 +798,12 @@ class env:
 
 
 
-            if mx == 2:
-                return False
+        if mx == 2:
+            return False
 
 
-            if abs(mx-mn) <=2:
-                return False
+        if abs(mx-mn) <=2:
+            return False
         
         moves = []
         for i in range(4):
