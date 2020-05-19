@@ -329,10 +329,10 @@ class env:
             taken = self.pile_to_tableau(debug)
             
         elif action == 4:
-            taken = self.foundation_to_tableau(fp_flag)
+            taken = self.foundation_to_tableau(fp_flag,debug)
             
         elif action == 5:
-            taken = self.tableau_to_tableau_not_reveal()
+            taken = self.tableau_to_tableau_not_reveal(debug)
     
         
         key = self.generate_hashable_state_modified(self.state)
@@ -770,7 +770,7 @@ class env:
             
         return True
         
-    def foundation_to_tableau(self,fp_flag):
+    def foundation_to_tableau(self,fp_flag,debug):
         
 #         moves = []
         
@@ -794,7 +794,8 @@ class env:
                     continue
                     
                 mx = max(mx,self.state.foundation[i][-1].number)
-
+            
+            print(mn,mx)
 
 
 
@@ -824,7 +825,16 @@ class env:
                 if last_card.color != card.color and last_card.number == card.number+1:
                     moves.append((i,j))
         
+            if card.number == 13 :
+                
+                for j in range(7):
+                    
+                    if len(self.state.tableau[j]) == 0:
+                        moves.append((i,j))
+                        
         
+        if debug == True:
+            print(moves)
         
         if len(moves) == 0:
             return False
@@ -872,7 +882,7 @@ class env:
                 return True
         
         return False
-    def tableau_to_tableau_not_reveal(self):
+    def tableau_to_tableau_not_reveal(self,debug):
         
         
         movable = []
@@ -883,7 +893,7 @@ class env:
             movable.append([])
             for j,card in enumerate(self.state.tableau[i]):
                 
-                if card.face == 'up' and i == 0:
+                if card.face == 'up' and j == 0:
                     
                     movable[i].extend(range(len(self.state.tableau[i])))
                     
@@ -897,6 +907,14 @@ class env:
                     
         #to_move = []
         
+        if debug == True:
+            
+            for i in range(7):
+                
+                print("cards movable in tableau {} \n".format(i),movable[i])
+                
+                
+                
         where_to_move = []
         
         which_movable_tableaus = []
@@ -913,29 +931,42 @@ class env:
                     if i == k:
                         continue
 
-                        to_move_card = self.state.tableau[i][to_move]
+                    to_move_card = self.state.tableau[i][to_move]
 
-                        
 
-                        condition1 = len(self.state.tableau[k])>0 and to_move_card.color != self.state.tableau[k][-1].color  
-                        condition2 = len(self.state.tableau[k])>0 and to_move_card.number+1 == self.state.tableau[k][-1].number
-                        
-                        if condition1 and condition2:
-                            where_to_move[i].append(j)
-                            
-                            which_movable_tableaus.append((i,j,k))
-                        else:
-                            
-                            where_to_move[i].append(np.inf)
+
+                    condition1 = len(self.state.tableau[k])>0 and to_move_card.color != self.state.tableau[k][-1].color  
+                    condition2 = len(self.state.tableau[k])>0 and to_move_card.number+1 == self.state.tableau[k][-1].number
+
+                    if debug == True:
+                        print(condition1,condition2)
+                    if condition1==True and condition2==True:
+                        where_to_move[i].append(j)
+
+                        which_movable_tableaus.append((i,j,k))
+                    else:
+
+                        where_to_move[i].append(np.inf)
                             
                  
+        if debug == True:
+            
+            print(len(which_movable_tableaus))
+            for i,j,k in which_movable_tableaus:
+                print(" from tableau {} to tableau {}, card {}".format(i,k,j))
+                
         
         if len(which_movable_tableaus) == 0:
             return False
         
+        
+        
+                
+                
+                
         mp = {}
         len_keys = 0
-        len_moves = len(moves)
+        len_moves = len(which_movable_tableaus)
         
         while len_keys < len_moves:
             
@@ -958,12 +989,12 @@ class env:
 
 
 
-            for card in deep_copy_state.tableau[from_tableau[cards_to_move:]]:
+            for cd in deep_copy_state.tableau[from_tableau][cards_to_move:]:
 
-                deep_copy_state.tableau[to_tableau].append(card)
+                deep_copy_state.tableau[to_tableau].append(cd)
 
 
-            deep_copy_state.tableau[from_tableau] = deep_copy_state.tableau[from_tableau[:cards_to_move]]
+            deep_copy_state.tableau[from_tableau] = deep_copy_state.tableau[from_tableau][:cards_to_move]
 
 
             hashable_state = self.generate_hashable_state_modified(deep_copy_state)
