@@ -1,4 +1,4 @@
-def greedy_policy(en,tot,action_freq,actions_matrix,game,fp_flag=False,debug=False,save_all_states = False,save_collected_data= {}):
+def greedy_policy(en=None,tot=20000,action_freq={},actions_matrix=[],game=None,fp_flag=False,debug=False,save_all_states = False,save_collected_data= {}):
     
     actions_m = []
     
