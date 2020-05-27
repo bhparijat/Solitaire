@@ -1,4 +1,4 @@
-def greedy_policy(en=None,tot=20000,action_freq={},actions_matrix=[],game=None,fp_flag=False,debug=False,save_all_states = False,save_collected_data= {}):
+def greedy_policy(en=None,tot=20000,action_freq={},actions_matrix=[],game=None,fp_flag=False,debug=False,save_all_states = False,save_collected_data= {},save_actions_matrix=False):
     
     actions_m = []
     
@@ -18,9 +18,11 @@ def greedy_policy(en=None,tot=20000,action_freq={},actions_matrix=[],game=None,f
                 
                 actions_m.append(action)
                 
-                game_states.append(en.state)
                 
-                actions_matrix[game] = [game,actions_m,en.state,start_state,"won"] 
+                
+                if save_actions_matrix == True:
+                    game_states.append(en.state)
+                    actions_matrix[game] = [game,actions_m,en.state,start_state,"won"] 
                 
                 hashable_state = en.generate_hashable_state_modified(en.state)
                 save_collected_data[hashable_state] = action
@@ -35,7 +37,8 @@ def greedy_policy(en=None,tot=20000,action_freq={},actions_matrix=[],game=None,f
                 action_freq[action]+=1
                 
                 actions_m.append(action)
-                game_states.append(en.state)
+                if save_actions_matrix == True:
+                    game_states.append(en.state)
                 
                 hashable_state = en.generate_hashable_state_modified(en.state)
                 save_collected_data[hashable_state] = action
@@ -43,14 +46,16 @@ def greedy_policy(en=None,tot=20000,action_freq={},actions_matrix=[],game=None,f
 
         if taken == False:
             
-            actions_matrix[game] = [game,actions_m,en.state,start_state,"No action could be taken"] 
+            if save_actions_matrix:
+                actions_matrix[game] = [game,actions_m,en.state,start_state,"No action could be taken"] 
+                
             if save_all_states == True:
                     actions_matrix[game].append(game_states)
                     
             return len(actions_m),False
         
-       
-    actions_matrix[game] = [game,actions_m,en.state,start_state,"Steps exhausted"] 
+    if save_actions_matrix:
+        actions_matrix[game] = [game,actions_m,en.state,start_state,"Steps exhausted"] 
     
     if save_all_states == True:
                     actions_matrix[game].append(game_states)
