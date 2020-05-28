@@ -926,7 +926,7 @@ class env:
                 
                 elif card.face == 'up':
                     first = True
-                    
+                    movable[i].append(j)
         #to_move = []
         
         if debug == True:
@@ -1070,4 +1070,49 @@ class env:
         #print(ans)   
         return ans   
         
+    def is_pile_consistent(self):
+        
+        consistent = True
+        
+        for cd in self.state.pile:
+            consistent = (cd.face == 'up') and consistent
+            
+        return consistent
+    
+    def is_foundation_consistent(self):
+        
+        consistent = True
+        
+        for i in range(4):
+            
+            for j,cd in enumerate(self.state.foundation[i]):
+                
+                consistent = consistent and (cd.face == 'up')
+                
+                
+        return consistent
+    
+    def is_tableau_consistent(self):
+        
+        
+        
+        for i in range(7):
+            
+            first = False
+            
+            for j,cd in enumerate(self.state.tableau[i]):
+                
+                if cd.face == 'down' and first == True:
+                    return False
+                
+                if cd.face == 'up' and first == False:
+                    first = True
+        
+            
+        return True
+    
+    
+    def is_consistent(self):
+        
+        return self.is_pile_consistent() and self.is_foundation_consistent() and self.is_tableau_consistent()
     

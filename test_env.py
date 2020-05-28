@@ -1,3 +1,9 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import random
+import time
+
 class card:
     """
     Defines structure for a card
@@ -35,17 +41,154 @@ class card:
         
         return face_map[self.face]
     
+class state:
+    """
+    Defines the structure of a state. A state holds pile, foundation and tableau, cards to review. 
     
+    """
+    def __init__(self):
+        
+        """
+        A state comprises of :
+            4 foundations ==> club, heart, diamond, spade in that order
+        
+            7 tableaus ===> cards facing up or down
+            
+            1 pile ===> empty or has cards
+        
+        """
+        
+        self.all_cards = []
+        self.pile = None
+        self.tableau = [[] for i in range(7)]
+        self.foundation = [[],[],[],[]]
+        
+        self.gen_non_special_cards('red','heart')
+        self.gen_non_special_cards('red','diamond')
+        self.gen_non_special_cards('black','spade')
+        self.gen_non_special_cards('black','club')
+        
+        
+        self.gen_special_cards('red','heart')
+        self.gen_special_cards('red','diamond')
+        self.gen_special_cards('black','spade')
+        self.gen_special_cards('black','club')
+        
+        #print(len(self.all_cards))
+        
+        random.shuffle(self.all_cards)
+        
+        pile_index = self.make_pile()
+        _ = self.make_tableau(pile_index)
+        
+        self.hashable_state = None
+    def make_pile(self):
+        
+        pile_index = random.sample(range(len(self.all_cards)),24 )
+        
+        pile_index.sort()
+        self.pile = [self.all_cards[i] for i in pile_index]
+        
+        for card in self.pile:
+            card.face = 'up'
+        #print(self.pile)
+        
+        return pile_index
+    
+   
+            
+    def make_tableau(self,pile_index):
+        
+        #print(pile_index)
+        tableau_index = [i for i in range(len(self.all_cards)) if i not in pile_index]
+        check1 = tableau_index[:]
+        check2 = []
+        #print("index of cards to be in tableau ", tableau_index)
+        
+        for i in range(1,8):
+            
+            all_cards_this_tableau_index = random.sample(range(len(tableau_index)),i)
+            
+            all_cards_this_tableau = [tableau_index[x] for x in all_cards_this_tableau_index]
+            #print("index of cards to be in {} tableau".format(i),all_cards_this_tableau)
+            
+            tableau_index = [x for x in tableau_index if x not in all_cards_this_tableau]
+            
+            for card_index  in all_cards_this_tableau:
+                
+                
+                self.tableau[i-1].append(self.all_cards[card_index])
+                check2.append(card_index)
+        
+        
+        for i in range(7):
+            for cd in self.tableau[i]:
+                cd.face = 'down'
+        
+        for i in range(7):
+            self.tableau[i][-1].face = 'up'
+          
+        
+        check1.sort()
+        check2.sort()
+        
+        #print(check1)
+        #print(check2)
+        
+        assert check1 == check2
+        #print(a)
+                
+    def gen_special_cards(self,color,suit,face = 'down'):
+        
+        self.all_cards.append(card(color,suit,1,'ACE',face))
+        self.all_cards.append(card(color,suit,13,'KING',face))
+        self.all_cards.append(card(color,suit,12,'QUEEN',face))
+        self.all_cards.append(card(color,suit,11,'JACK',face))
+        
+        
+    def gen_non_special_cards(self,color,suit,face = "down",speciality = None):
+        
+        for number in range(2,11):
+            self.all_cards.append(card(color,suit,number,speciality,face))
+            
+            
     
 class TestEnv:
     
-    def __init__(self,state):
+    def __init__(self,start_state):
         
-        self.start_state = state
-        self.state = state
+        self.start_state = start_state
+        self.state = state()
+        
+        self.make_state(start_state)
+        
         self.hashable_map = {}
         
+    def make_state(self,state):
         
+        self.state.pile = []
+        self.state.tableau = []
+        self.state.foundation = []
+        
+        
+        for cd in state.pile:
+            self.state.pile.append(card(cd.color,cd.suit,cd.number,cd.speciality,cd.face))
+            
+            
+        for i in range(7):
+            
+            self.state.tableau.append([])
+            
+            for cd in state.tableau[i]:
+                
+                self.state.tableau[i].append(card(cd.color,cd.suit,cd.number,cd.speciality,cd.face))
+                
+                
+        for i in range(4):
+            self.state.foundation.append([])
+            
+            for cd in state.foundation[i]:
+                self.state.foundation[i].append(card(cd.color,cd.suit,cd.number,cd.speciality,cd.face))
     def reset(self):
         
         self.state = self.start_state
@@ -81,21 +224,26 @@ class TestEnv:
     
     def get_foundation(self):
         
-        for i in range(4):
-            for j,cd in enumerate(self.foundation[i]):
-                print("position={} suit={} color={} number={} face={}".format(j,cd.suit,cd.color,cd.number,cd.face))
-    
+           for i,foundation in enumerate(self.state.foundation):
+                print("printing foundation number {} ********************".format(i+1))
+                self.print_cards(foundation)
+     
+    def print_card(self,card,i):
+        print("position {:4} suit = {:10s} color = {:10s} number = {:5} speciality = {:10s} face = {:5s}".format(i,card.suit,card.color,card.number,str(card.speciality),card.face))
+    def print_cards(self,cards):
+        
+        for i,card in enumerate(cards):
+            self.print_card(card,i)
+            
     def get_pile(self):
         
-        for j,cd in enumerate(self.pile):
-            print("position={} suit={} color={} number={} face={}".format(j,cd.suit,cd.color,cd.number,cd.face))
-
+        self.print_cards(self.state.pile)
+        
     def get_tableau(self):
         
-        for i in range(7):
-            for j,cd in enumerate(self.tableau[i]):
-                print("position={} suit={} color={} number={} face={}".format(j,cd.suit,cd.color,cd.number,cd.face))
-                
+        for i,tableau in enumerate(self.state.tableau):
+            print("printing tableau number {} ********************".format(i+1))
+            self.print_cards(tableau)
                 
 
     def get_hashable_state(self):
@@ -103,7 +251,7 @@ class TestEnv:
         
         hashable_state_pile = []
         
-        for cd in state.pile:
+        for cd in self.state.pile:
             card_tuple = self.get_card_tuple(cd)
             hashable_state_pile.append(card_tuple)
         
@@ -113,7 +261,7 @@ class TestEnv:
             
             hashable_state_tableau = []
             
-            for cd in state.tableau[i]:
+            for cd in self.state.tableau[i]:
 
                 card_tuple = self.get_card_tuple(cd)
                 hashable_state_tableau.append(card_tuple)
@@ -128,7 +276,7 @@ class TestEnv:
             
             
             hashable_state_foundation = []
-            for cd in state.foundation[i]:
+            for cd in self.state.foundation[i]:
                 
                 
                 card_tuple = self.get_card_tuple(cd)
@@ -147,6 +295,8 @@ class TestEnv:
         action_number,from_tableau,to_foundation,moved_card = action_data
         
         cd = self.state.tableau[from_tableau].pop()
+        
+        self.state.tableau[from_tableau][-1].face = 'up'
         
         if debug == True:
             self.compare_cards(cd,moved_card)
@@ -179,7 +329,7 @@ class TestEnv:
             print(self.compare_cards(cd,moved_card))
 
 
-        self.foundation[to_foundation].append(cd)
+        self.state.foundation[to_foundation].append(cd)
 
         hashable_state = self.get_hashable_state()
 
@@ -258,13 +408,14 @@ class TestEnv:
             
         action_number,from_foundation, to_tableau, moved_card = action_data
                 
-        cd = self.state.foundation.pop()
+        cd = self.state.foundation[from_foundation].pop()
         
         if debug == True:
             print(self.compare_card(cd,moved_card))
             
         self.state.tableau[to_tableau].append(cd)
         
+        hashable_state = self.get_hashable_state()
         if hashable_state in self.hashable_map:
             return False
 
@@ -309,3 +460,21 @@ class TestEnv:
 
         return True
             
+        
+    def isterminal(self):
+        
+        ans = (len(self.state.pile) == 0)
+        
+        #print(ans)
+        for i in range(len(self.state.tableau)):
+            ans = ans and (len(self.state.tableau[i]) == 0 )
+            
+            
+        #print(ans)
+        
+        for i in range(len(self.state.foundation)):
+            ans = ans and (len(self.state.foundation[i])==13)
+            
+            
+        #print(ans)   
+        return ans   
