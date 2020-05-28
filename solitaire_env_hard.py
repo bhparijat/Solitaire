@@ -484,7 +484,7 @@ class env:
                 
                 ## adding for test environment
                 
-                self.state.action_description.append((from_tableau,self.suit_number(card.suit), card))
+                self.action_description.append((0,from_tableau,self.suit_number(card.suit), card))
                 return True
         
         return False
@@ -601,7 +601,7 @@ class env:
                 
                 t = "pile" if typ == 0 else "tableau"
                 
-                self.state.action_description((t,i,f_no,card))
+                self.action_description.append((1,t,i,f_no,card))
                 return True
             #return True
         
@@ -699,12 +699,13 @@ class env:
             #ind = random.sample(range(len(moves)),1)[0]
            
             from_tableau,i,to_tableau = moves[ind]
-
+            
+            cd_stack = []
             for card in deep_copy_state.tableau[from_tableau][i:]:
 
                 deep_copy_state.tableau[to_tableau].append(card)
 
-
+                cd_stack.append(card)
 
             deep_copy_state.tableau[from_tableau] = deep_copy_state.tableau[from_tableau][:i]
 
@@ -719,9 +720,12 @@ class env:
                 
                 self.hashable_map[hashable_state] = 1
                 
+                ### adding action description for test environment
+                self.action_description.append((2,from_tableau,to_tableau,i,cd_stack))
+                
                 return True
 
-            #return True
+            
         
         return False
     def pile_to_tableau(self,debug):
@@ -752,7 +756,7 @@ class env:
             #ind = random.sample(range(len(movable_indices_tableau)),1)[0]
 
 
-
+            
             to_move = movable_indices_tableau[ind]
 
             card_to_move = deep_copy_state.pile[to_move]
@@ -778,6 +782,9 @@ class env:
                 
                 self.hashable_map[hashable_state] = 1
                 
+                
+                ### adding action_description for test_environment
+                self.action_description.append((3,to_move,tableau_index,card_to_move))
                 return True
             
         return True
@@ -890,7 +897,10 @@ class env:
                 self.state = deep_copy_state
 
                 self.hashable_map[hashable_state] = 1
-
+                
+                ### adding action description for test environment
+                
+                self.action_description.append((4,foundation,tableau,card))
                 return True
         
         return False
@@ -999,12 +1009,12 @@ class env:
 
 
 
-
+            cd_stack = []
 
             for cd in deep_copy_state.tableau[from_tableau][cards_to_move:]:
 
                 deep_copy_state.tableau[to_tableau].append(cd)
-
+                cd_stack.append(cd)
 
             deep_copy_state.tableau[from_tableau] = deep_copy_state.tableau[from_tableau][:cards_to_move]
 
@@ -1016,7 +1026,11 @@ class env:
                 self.state = deep_copy_state
 
                 self.hashable_map[hashable_state] = 1
-
+                
+                ### action description for test environment
+                
+                self.action_description.append((5,from_tableau,to_tableau,cards_to_move,cd_stack))
+                
                 return True
         
         return False

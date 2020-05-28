@@ -144,7 +144,7 @@ class TestEnv:
         return tuple(hashable_state)
     def tableau_to_foundation_reveal(self,debug,action_data):
         
-        from_tableau,to_foundation,moved_card = action_data
+        action_number,from_tableau,to_foundation,moved_card = action_data
         
         cd = self.state.tableau[from_tableau].pop()
         
@@ -164,7 +164,7 @@ class TestEnv:
         
     def to_foundation_stack(self,debug,action_data):
         
-        typ, from_position,to_foundation, moved_card = action_data
+        action_number,typ, from_position,to_foundation, moved_card = action_data
         
         if typ == "pile":
             
@@ -194,7 +194,7 @@ class TestEnv:
             
     def tableau_to_tableau_reveal(self,debug,action_data):
         
-        from_tableau, to_tableau, from_tableau_position, moved_card_stack = action_data
+        action_number,from_tableau, to_tableau, from_tableau_position, moved_card_stack = action_data
             
         cd_stack = self.state.tableau[from_tableau][from_tableau_position:]
         
@@ -231,7 +231,7 @@ class TestEnv:
     def pile_to_tableau(self,debug,action_data):        
             
             
-        from_pile_position, to_tableau, moved_card = action_data
+        action_number,from_pile_position, to_tableau, moved_card = action_data
         
         cd = self.state.pile.pop(from_pile_position)
         
@@ -256,7 +256,7 @@ class TestEnv:
     def foundation_to_tableau(self, debug,action_data):
         
             
-        from_foundation, to_tableau, moved_card = action_data
+        action_number,from_foundation, to_tableau, moved_card = action_data
                 
         cd = self.state.foundation.pop()
         
@@ -275,7 +275,7 @@ class TestEnv:
         
     def tableau_to_tableau_not_reveal(self,debug,action_data):
         
-        from_tableau, to_tableau, from_tableau_position, moved_card_stack = action_data
+        action_number,from_tableau, to_tableau, from_tableau_position, moved_card_stack = action_data
         
         cd_stack = self.state.tableau[from_tableau][from_tableau_position:]
         
