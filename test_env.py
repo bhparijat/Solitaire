@@ -235,18 +235,77 @@ class TestEnv:
         
         cd = self.state.pile.pop(from_pile_position)
         
+        if debug == True:
+            print(self.compare_card(cd,moved_card))
+            
+            
+        self.state.tableau[to_tableau].append(cd)   
+            
+        hashable_state = self.get_hashable_state()
+
+        if hashable_state in self.hashable_map:
+            return False
+
+        self.hashable_map[hashable_state] = 1
+
+        return True
+            
+            
+            
+            
+    def foundation_to_tableau(self, debug,action_data):
         
             
+        from_foundation, to_tableau, moved_card = action_data
+                
+        cd = self.state.foundation.pop()
+        
+        if debug == True:
+            print(self.compare_card(cd,moved_card))
+            
+        self.state.tableau[to_tableau].append(cd)
+        
+        if hashable_state in self.hashable_map:
+            return False
+
+        self.hashable_map[hashable_state] = 1
+
+        return True
+            
+        
+    def tableau_to_tableau_not_reveal(self,debug,action_data):
+        
+        from_tableau, to_tableau, from_tableau_position, moved_card_stack = action_data
+        
+        cd_stack = self.state.tableau[from_tableau][from_tableau_position:]
+        
+        if debug == True:
+            
+            match = True
+            
+            for cd1,cd2 in zip(cd_stack,moved_card):
+                match = match and self.compare_cards(cd1,cd2)
+                
+            print(match)
+                
+        
+        self.state.tableau[from_tableau] =  self.state.tableau[from_tableau][:from_tableau_position]
+        
+        
+        
+        
+        for cd in cd_stack:
+            
+            self.state.tableau[to_tableau].append(cd)
             
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
+        hashable_state = self.get_hashable_state()
+
+        if hashable_state in self.hashable_map:
+            return False
+
+        self.hashable_map[hashable_state] = 1
+
+        return True
             

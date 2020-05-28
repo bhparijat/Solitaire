@@ -174,6 +174,7 @@ class env:
         self.map = {}
         self.number_of_states = 0
         
+        self.action_description = []
     def reset(self):
         self.state = state()
     
@@ -480,6 +481,10 @@ class env:
                 
                 self.hashable_map[hashable_state] = 1
                 
+                
+                ## adding for test environment
+                
+                self.state.action_description.append((from_tableau,self.suit_number(card.suit), card))
                 return True
         
         return False
@@ -557,7 +562,9 @@ class env:
             
             
             typ, i = moves[ind]
-
+            
+            f_no = None
+            card = None
             if typ == 0:
 
                 card = deep_copy_state.pile[i]
@@ -589,7 +596,12 @@ class env:
                 self.state = deep_copy_state
                 
                 self.hashable_map[hashable_state] = 1
+               
+                ## adding action description for test environment
                 
+                t = "pile" if typ == 0 else "tableau"
+                
+                self.state.action_description((t,i,f_no,card))
                 return True
             #return True
         
