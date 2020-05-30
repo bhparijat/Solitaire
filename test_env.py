@@ -195,7 +195,7 @@ class TestEnv:
         self.hashable_map = {}
         
         
-    def step(self,action,debug,action_data):
+    def step(self,action=0,debug=True,action_data=(0,0,None)):
         
         if action == 0:
             taken = self.tableau_to_foundation_reveal(debug,action_data)
