@@ -175,6 +175,8 @@ class env:
         self.number_of_states = 0
         
         self.action_description = []
+        
+        self.consistent = None
     def reset(self):
         self.state = state()
     
@@ -346,7 +348,7 @@ class env:
             
         self.map[key]+=1
         
-        
+        self.consistent = self.is_consistent()
         return self.isterminal(),taken
     
     
@@ -956,16 +958,17 @@ class env:
                     to_move_card = self.state.tableau[i][to_move]
 
 
-
-                    condition1 = len(self.state.tableau[k])>0 and to_move_card.color != self.state.tableau[k][-1].color  
-                    condition2 = len(self.state.tableau[k])>0 and to_move_card.number+1 == self.state.tableau[k][-1].number
+                    
+                    condition1 = len(self.state.tableau[k])>0 and (to_move_card.color != self.state.tableau[k][-1].color)  
+                    condition2 = len(self.state.tableau[k])>0 and ((to_move_card.number+1) == self.state.tableau[k][-1].number)
 
                     if debug == True:
-                        print(condition1,condition2)
+                        print(condition1,condition2,i,j,k)
+                        
                     if condition1==True and condition2==True:
                         where_to_move[i].append(j)
 
-                        which_movable_tableaus.append((i,j,k))
+                        which_movable_tableaus.append((i,to_move,k))
                     else:
 
                         where_to_move[i].append(np.inf)
