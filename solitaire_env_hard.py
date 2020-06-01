@@ -320,22 +320,22 @@ class env:
             print("Debug is True")
             
         if action == 0 :
-            taken = self.tableau_to_foundation_reveal()
+            taken = self.tableau_to_foundation_reveal(debug[0])
             
         elif action == 1:
-            taken = self.to_foundation_stack(debug)
+            taken = self.to_foundation_stack(debug[1])
             
         elif action == 2:
-            taken = self.tableau_to_tableau_reveal()
+            taken = self.tableau_to_tableau_reveal(debug[2])
             
         elif action == 3:
-            taken = self.pile_to_tableau(debug)
+            taken = self.pile_to_tableau(debug[3])
             
         elif action == 4:
-            taken = self.foundation_to_tableau(fp_flag,debug)
+            taken = self.foundation_to_tableau(fp_flag,debug[4])
             
         elif action == 5:
-            taken = self.tableau_to_tableau_not_reveal(debug)
+            taken = self.tableau_to_tableau_not_reveal(debug[5])
     
         
         key = self.generate_hashable_state_modified(self.state)
@@ -422,7 +422,7 @@ class env:
         return movable_where,movable_indices_tableau,movable_indices_foundation
             
         
-    def tableau_to_foundation_reveal(self):
+    def tableau_to_foundation_reveal(self,debug0):
         
         movable = []
         moves = []
@@ -490,7 +490,7 @@ class env:
                 return True
         
         return False
-    def to_foundation_stack(self,debug):
+    def to_foundation_stack(self,debug1):
         
         
         moves = []
@@ -510,7 +510,7 @@ class env:
                     moves.append((0,i))
 
 
-        if debug == True:    
+        if debug1 == True:    
             print("moves from pile\n",moves);
 
                
@@ -534,7 +534,7 @@ class env:
             return False
         
         
-        if debug == True:
+        if debug1 == True:
             
             for x in tableau_moves:
                 
@@ -608,7 +608,7 @@ class env:
             #return True
         
         return False
-    def tableau_to_tableau_reveal(self):
+    def tableau_to_tableau_reveal(self,debug2):
         
         movable = []
         
@@ -730,7 +730,7 @@ class env:
             
         
         return False
-    def pile_to_tableau(self,debug):
+    def pile_to_tableau(self,debug3):
         
         movable_where,movable_indices_tableau,movable_indices_foundation  = self.highlight_movable_cards_pile()
         
@@ -791,15 +791,15 @@ class env:
             
         return True
         
-    def foundation_to_tableau(self,fp_flag,debug):
+    def foundation_to_tableau(self,fp_flag,debug4):
         
 #         moves = []
-        
+        mn = 13
+        mx = 0
         if fp_flag == True:
             
             #print("flag is being checked")
-            mn = 13
-            mx = 0
+            
             for i in range(4):
                 if len(self.state.foundation[i]) == 0:
                     mn = 0
@@ -818,8 +818,6 @@ class env:
             
             #print(mn,mx)
 
-
-
         if mx == 2:
             return False
 
@@ -828,6 +826,57 @@ class env:
             return False
         
         moves = []
+       
+        # ****************************************************************************************
+        # Modifying foundation progression
+        
+        
+        progression = []
+        
+        for i in range(4):
+            
+            if len(self.state.foundation[i]) > 0 and (self.state.foundation[i][-1].number-mn)>2:
+                progression.append((i,self.state.foundation[i][-1]))
+                    
+        
+        
+        
+        
+        
+        
+        
+        
+        n = len(progression)
+        
+        
+        
+            
+           
+              
+        print("***************start foundation ******************************")
+        for i in range(4):
+            if len(self.state.foundation[i])>0:
+                self.print_card(self.state.foundation[i][-1])
+        print("*************** end foundation *****************************")
+        
+        
+        
+        if debug4 == True:
+            print("***************progression starts ******************************")
+            for i in range(n):
+                self.print_card(progression[i])
+            print("*******************progression ends **************************")
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         for i in range(4):
             
             if len(self.state.foundation[i]) == 0:
@@ -854,8 +903,9 @@ class env:
                         moves.append((i,j))
                         
         
-        if debug == True:
-            print(moves)
+        if debug4 == True:
+            #print(moves)
+            pass
         
         if len(moves) == 0:
             return False
@@ -906,7 +956,7 @@ class env:
                 return True
         
         return False
-    def tableau_to_tableau_not_reveal(self,debug):
+    def tableau_to_tableau_not_reveal(self,debug5):
         
         
         movable = []
@@ -931,7 +981,7 @@ class env:
                     movable[i].append(j)
         #to_move = []
         
-        if debug == True:
+        if debug5 == True:
             
             for i in range(7):
                 
@@ -962,7 +1012,7 @@ class env:
                     condition1 = len(self.state.tableau[k])>0 and (to_move_card.color != self.state.tableau[k][-1].color)  
                     condition2 = len(self.state.tableau[k])>0 and ((to_move_card.number+1) == self.state.tableau[k][-1].number)
 
-                    if debug == True:
+                    if debug5 == True:
                         print(condition1,condition2,i,j,k)
                         
                     if condition1==True and condition2==True:
@@ -974,7 +1024,7 @@ class env:
                         where_to_move[i].append(np.inf)
                             
                  
-        if debug == True:
+        if debug5 == True:
             
             print(len(which_movable_tableaus))
             for i,j,k in which_movable_tableaus:
