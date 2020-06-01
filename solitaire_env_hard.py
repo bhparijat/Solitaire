@@ -856,7 +856,7 @@ class env:
         print("***************start foundation ******************************")
         for i in range(4):
             if len(self.state.foundation[i])>0:
-                self.print_card(self.state.foundation[i][-1])
+                self.print_card(self.state.foundation[i][-1],i)
         print("*************** end foundation *****************************")
         
         
@@ -864,7 +864,7 @@ class env:
         if debug4 == True:
             print("***************progression starts ******************************")
             for i in range(n):
-                self.print_card(progression[i])
+                self.print_card(progression[i][1],i)
             print("*******************progression ends **************************")
 
         
