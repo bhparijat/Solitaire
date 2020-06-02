@@ -837,52 +837,29 @@ class env:
             
             if len(self.state.foundation[i]) > 0 and (self.state.foundation[i][-1].number-mn)>2:
                 progression.append((i,self.state.foundation[i][-1]))
-                    
-        
-        
-        
-        
-        
-        
-        
-        
+      
         n = len(progression)
-        
-        
-        
-            
-           
+     
+        if debug4 == True:   
               
-        print("***************start foundation ******************************")
-        for i in range(4):
-            if len(self.state.foundation[i])>0:
-                self.print_card(self.state.foundation[i][-1],i)
-        print("*************** end foundation *****************************")
-        
-        
-        
-        if debug4 == True:
+            print("***************start foundation ******************************")
+            for i in range(4):
+                if len(self.state.foundation[i])>0:
+                    self.print_card(self.state.foundation[i][-1],i)
+            print("*************** end foundation *****************************")
+
             print("***************progression starts ******************************")
             for i in range(n):
                 self.print_card(progression[i][1],i)
             print("*******************progression ends **************************")
-
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        for i in range(4):
+        #for i in range(4):
+        for i,card in progression:
             
-            if len(self.state.foundation[i]) == 0:
-                continue
+#             if len(self.state.foundation[i]) == 0:
+#                 continue
                 
-            card = self.state.foundation[i][-1]
+            #card = self.state.foundation[i][-1]
             
             for j in range(7):
                 
@@ -1123,6 +1100,33 @@ class env:
         #print(ans)   
         return ans   
         
+    def is_tableau_full(self):
+        
+        full = True
+        
+        for i in range(7):
+            
+            if len(self.state.tableau[i]) < 13:
+                return False
+            
+            for j in range(1,13):
+                
+                cd2 = self.state.tableau[i][j] 
+                
+                cd1 = self.state.tableau[i][j-1]
+                
+                
+                if cd2.number != (cd1.number-1) or (cd2.color == cd1.color) or (cd2.face!='up'):
+                    return False
+                
+                
+                
+                
+        return True
+                
+                
+                
+                
     def is_pile_consistent(self):
         
         consistent = True
